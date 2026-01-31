@@ -1,0 +1,6 @@
+use Test;
+use App::ByWord;
+
+pass "replace me";
+
+done-testing;
