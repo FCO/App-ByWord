@@ -122,14 +122,14 @@ by-word file1.txt file2.txt
 DEPENDENCIES
 ============
 
-  * `Terminal::Width` — terminal width detection.
+  * `Terminal::API` — terminal window size and TTY helpers.
 
   * `Terminal::ANSI` — cursor movement, screen control, and styling (red ORP character).
 
 SEE ALSO
 ========
 
-`Terminal::Width`, `Terminal::ANSI`
+`Terminal::API`, `Terminal::ANSI`
 
 AUTHOR
 ======

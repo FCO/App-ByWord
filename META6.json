@@ -8,11 +8,10 @@
   ],
   "build-depends": [
   ],
-    "depends": [
-      "Terminal::API",
-      "Terminal::ANSI"
-    ],
-
+  "depends": [
+    "Terminal::API",
+    "Terminal::ANSI"
+  ],
   "description": "Rapid serial word presentation (RSVP) in the terminal. Highlights the ORP character in red for faster recognition; provides CLI script.",
   "license": "Artistic-2.0",
   "name": "App::ByWord",
@@ -38,5 +37,5 @@
   "test-depends": [
     "Test"
   ],
-  "version": "0.0.2"
+  "version": "0.0.3"
 }
