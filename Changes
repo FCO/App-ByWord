@@ -4,6 +4,8 @@ Revision history for App::ByWord
     - CLI: add `--wait`, `--wait-to-start`, and `--wait-to-finish` options; document usage as `by-word [<files> ...] [-w|--wpm[=UInt]] [-b|--border] [-l|--line-no[=UInt]] [-t|--to-left[=Int]] [-s|--starting-word[=UInt]] [--wait[=UInt]] [--wait-to-start[=UInt]] [--wait-to-finish[=UInt]]`.
     - API: `by-word` gains `UInt :$wait`, `UInt :$wait-to-start`, and `UInt :$wait-to-finish` parameters; defaults derive from `:$wpm`.
     - Documentation: update POD for CLI and module to include the new wait options and mention `SIGTERM` in Signals; correct `:$wpm` default to 200.
+    - Dependencies: replace `Terminal::Width` with `Terminal::API`; update `META6.json` and module POD references accordingly.
+    - Documentation: add DEMO section with Markdown image `docs/by-word-demo.gif` to CLI and module Pods.
 
 0.0.2  2026-02-01T13:49:34Z
     - CLI: add `-s|--starting-word` option and short flags for existing options; document usage as `by-word [<files> ...] [-w|--wpm[=UInt]] [-b|--border] [-l|--line-no[=UInt]] [-t|--to-left[=Int]] [-s|--starting-word[=UInt]]`.
