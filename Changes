@@ -1,6 +1,8 @@
 Revision history for App::ByWord
 
 {{$NEXT}}
+
+0.0.2  2026-02-01T13:49:34Z
     - CLI: add `-s|--starting-word` option and short flags for existing options; document usage as `by-word [<files> ...] [-w|--wpm[=UInt]] [-b|--border] [-l|--line-no[=UInt]] [-t|--to-left[=Int]] [-s|--starting-word[=UInt]]`.
     - CLI: print total words read at the end (uses function return value).
     - API: `by-word` now returns the total number of words read (`UInt`) to facilitate resuming with `:starting-word`.
