@@ -14,11 +14,14 @@ sub calc-orp(Str() $word) is export {
 
 sub by-word(
 	Supply() $supply,
-	UInt :$wpm           = 300,
-	Bool :$border        = True,
-	UInt :$line-no       = 11,
-	Int  :$to-left       = 5,
-	UInt :$starting-word = 0,
+	UInt :$wpm            = 200,
+	Bool :$border         = True,
+	UInt :$line-no        = 11,
+	Int  :$to-left        = 5,
+	UInt :$starting-word  = 0,
+	UInt :$wait           = $wpm div 50,
+	UInt :$wait-to-start  = $wait,
+	UInt :$wait-to-finish = $wait,
 	--> UInt
 ) is export {
 	my sub toggle-status {
@@ -37,7 +40,11 @@ sub by-word(
 
 	my Supply $words .= zip: :with{@_.tail}, $interval, supply {
 		whenever $supply -> $line {
-			LAST done;
+			LAST {
+				emit("") xx $wait-to-finish;
+				done;
+			}
+			emit("") xx $wait-to-start;
 			for $line.comb: / \w+ | <+[\S]-[\w]>+/ {
 				.emit
 			}
@@ -56,16 +63,10 @@ sub by-word(
 			my $width      = terminal-width;
 			my $half-width = $width div 2;
 
-			next if $line-no > $width;
-
-			my $orp  = calc-orp $word;
-			my $pre  = $word.substr: 0, $orp;
-			my $char = $word.substr: $orp, 1;
-			my $post = $word.substr: $orp + 1;
-
 			my $left-half  = $half-width - $to-left;
 			my $right-half = $half-width - $to-left + 1;
-			my $right      = $right-half + $post.chars;
+
+			next if $line-no > $width;
 
 			if $border {
 				if $line-no > 0 {
@@ -80,6 +81,15 @@ sub by-word(
 					print-at $line-no + 1, $right-half, "━" x $half-width + $to-left;
 				}
 			}
+
+			next unless $word;
+
+			my $orp  = calc-orp $word;
+			my $pre  = $word.substr: 0, $orp;
+			my $char = $word.substr: $orp, 1;
+			my $post = $word.substr: $orp + 1;
+
+			my $right      = $right-half + $post.chars;
 
 			print-at $line-no, 0                , " " x $left-half - $orp;
 			print-at $line-no, $left-half - $orp, $pre;
@@ -121,19 +131,25 @@ App::ByWord renders one word at a time centered in the terminal, highlighting th
 
     sub by-word(
         Supply() $supply,
-        UInt :$wpm           = 300,
-        Bool :$border        = True,
-        UInt :$line-no       = 11,
-        Int  :$to-left       = 5,
-        UInt :$starting-word = 0,
+        UInt :$wpm            = 200,
+        Bool :$border         = True,
+        UInt :$line-no        = 11,
+        Int  :$to-left        = 5,
+        UInt :$starting-word  = 0,
+        UInt :$wait           = $wpm div 50,
+        UInt :$wait-to-start  = $wait,
+        UInt :$wait-to-finish = $wait,
     ) is export
 
-=item C<$supply>: A C<Supply> of lines. Each line is split into words (C<.words>) and emitted one by one.
-=item C<:$wpm>: Words per minute; the inter‑word interval is C<60 / $wpm>.
+=item C<$supply>: A C<Supply> of lines. Each line is split into words and emitted one by one.
+=item C<:$wpm>: Words per minute; base interval C<60 / $wpm>.
 =item C<:$border>: When true, draws guide bars above/below the focus line for visual anchoring.
 =item C<:$line-no>: 1‑based line number where the word is drawn.
 =item C<:$to-left>: Horizontal offset (to the left of the terminal center) of the anchor position.
 =item C<:$starting-word>: Start from this word index (skip).
+=item C<--wait>: Base delay unit used for empty intervals (no word emitted). Defaults to C<$wpm div 50>.
+=item C<--wait-to-start>: Number of empty intervals emitted before the first word of each input line. Defaults to C<--wait>.
+=item C<--wait-to-finish>: Number of empty intervals emitted after the last word of each input line. Defaults to C<--wait>.
 
 =head2 Return Value
 
@@ -169,7 +185,7 @@ Or use the CLI command C<by-word>:
 
 =begin code :lang<bash>
 
-    by-word [<files> ...] [-w|--wpm[=UInt]] [-b|--border] [-l|--line-no[=UInt]] [-t|--to-left[=Int]] [-s|--starting-word[=UInt]]
+    by-word [<files> ...] [-w|--wpm[=UInt]] [-b|--border] [-l|--line-no[=UInt]] [-t|--to-left[=Int]] [-s|--starting-word[=UInt]] [--wait[=UInt]] [--wait-to-start[=UInt]] [--wait-to-finish[=UInt]]
 
 =end code
 

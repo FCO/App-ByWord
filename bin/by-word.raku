@@ -17,13 +17,19 @@ multi MAIN(
 	UInt :l(:$line-no      ),
 	Int  :t(:$to-left      ),
 	UInt :s(:$starting-word),
+	UInt :$wait             ,
+	UInt :$wait-to-start    ,
+	UInt :$wait-to-finish   ,
 ) {
 	my $words = by-word Supply.merge(|@files.map(*.IO.Supply) || $*IN.Supply),
-		|(:$wpm           with $wpm          ),
-		|(:$border        with $border       ),
-		|(:$line-no       with $line-no      ),
-		|(:$to-left       with $to-left      ),
-		|(:$starting-word with $starting-word),
+		|(:$wpm            with $wpm           ),
+		|(:$border         with $border        ),
+		|(:$line-no        with $line-no       ),
+		|(:$to-left        with $to-left       ),
+		|(:$starting-word  with $starting-word ),
+		|(:$wait           with $wait          ),
+		|(:$wait-to-start  with $wait-to-start ),
+		|(:$wait-to-finish with $wait-to-finish),
 	;
 
 	say "Read $words words"
@@ -52,13 +58,16 @@ This script drives App::ByWord to render one word at a time in your terminal usi
 
 =head1 OPTIONS
 
-Usage: C<by-word [<files> ...] [-w|--wpm[=UInt]] [-b|--border] [-l|--line-no[=UInt]] [-t|--to-left[=Int]] [-s|--starting-word[=UInt]]>
+Usage: C<by-word [<files> ...] [-w|--wpm[=UInt]] [-b|--border] [-l|--line-no[=UInt]] [-t|--to-left[=Int]] [-s|--starting-word[=UInt]] [--wait[=UInt]] [--wait-to-start[=UInt]] [--wait-to-finish[=UInt]]>
 
 - C<-w|--wpm[=UInt]>           Words per minute (pace).
 - C<-b|--[no-]border>          Draw guide bars above/below the focus line.
 - C<-l|--line-no[=UInt]>       1-based line number for the word.
 - C<-t|--to-left[=Int]>        Horizontal offset left of center for the anchor.
 - C<-s|--starting-word[=UInt]> Start from this word index (skip).
+- C<--wait[=UInt]>             Base delay unit in empty intervals; default C<wpm div 50>.
+- C<--wait-to-start[=UInt]>    Empty intervals before the first word of each line; defaults to C<--wait>.
+- C<--wait-to-finish[=UInt]>   Empty intervals after the last word of each line; defaults to C<--wait>.
 
 =head1 INPUTS
 
@@ -68,6 +77,7 @@ Usage: C<by-word [<files> ...] [-w|--wpm[=UInt]] [-b|--border] [-l|--line-no[=UI
 =head1 SIGNALS
 
 - C<SIGINT> (Ctrl‑C): stops playback and restores the terminal state.
+- C<SIGTERM>: also stops playback and restores the terminal state.
 
 =head1 SEE ALSO
 

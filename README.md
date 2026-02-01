@@ -27,16 +27,19 @@ sub by-word
 
     sub by-word(
         Supply() $supply,
-        UInt :$wpm           = 300,
-        Bool :$border        = True,
-        UInt :$line-no       = 11,
-        Int  :$to-left       = 5,
-        UInt :$starting-word = 0,
+        UInt :$wpm            = 200,
+        Bool :$border         = True,
+        UInt :$line-no        = 11,
+        Int  :$to-left        = 5,
+        UInt :$starting-word  = 0,
+        UInt :$wait           = $wpm div 50,
+        UInt :$wait-to-start  = $wait,
+        UInt :$wait-to-finish = $wait,
     ) is export
 
-  * `$supply`: A `Supply` of lines. Each line is split into words (`.words`) and emitted one by one.
+  * `$supply`: A `Supply` of lines. Each line is split into words and emitted one by one.
 
-  * `:$wpm`: Words per minute; the inter‑word interval is `60 / $wpm`.
+  * `:$wpm`: Words per minute; base interval `60 / $wpm`.
 
   * `:$border`: When true, draws guide bars above/below the focus line for visual anchoring.
 
@@ -45,6 +48,12 @@ sub by-word
   * `:$to-left`: Horizontal offset (to the left of the terminal center) of the anchor position.
 
   * `:$starting-word`: Start from this word index (skip).
+
+  * `--wait`: Base delay unit used for empty intervals (no word emitted). Defaults to `$wpm div 50`.
+
+  * `--wait-to-start`: Number of empty intervals emitted before the first word of each input line. Defaults to `--wait`.
+
+  * `--wait-to-finish`: Number of empty intervals emitted after the last word of each input line. Defaults to `--wait`.
 
 Return Value
 ------------
@@ -78,7 +87,7 @@ EXAMPLES
 Or use the CLI command `by-word`:
 
 ```bash
-    by-word [<files> ...] [-w|--wpm[=UInt]] [-b|--border] [-l|--line-no[=UInt]] [-t|--to-left[=Int]] [-s|--starting-word[=UInt]]
+    by-word [<files> ...] [-w|--wpm[=UInt]] [-b|--border] [-l|--line-no[=UInt]] [-t|--to-left[=Int]] [-s|--starting-word[=UInt]] [--wait[=UInt]] [--wait-to-start[=UInt]] [--wait-to-finish[=UInt]]
 ```
 
 SIGNALS
