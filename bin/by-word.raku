@@ -56,6 +56,10 @@ by-word — CLI for App::ByWord
 
 This script drives App::ByWord to render one word at a time in your terminal using RSVP. It accepts either STDIN or any number of file paths. When file paths are given, they are merged into a single stream.
 
+=head1 DEMO
+
+![by-word demo](docs/by-word-demo.gif)
+
 =head1 OPTIONS
 
 Usage: C<by-word [<files> ...] [-w|--wpm[=UInt]] [-b|--border] [-l|--line-no[=UInt]] [-t|--to-left[=Int]] [-s|--starting-word[=UInt]] [--wait[=UInt]] [--wait-to-start[=UInt]] [--wait-to-finish[=UInt]]>

@@ -163,6 +163,10 @@ The ORP index is computed as:
 
 This picks an internal index (1..4) for the character to highlight in each word, aiding faster recognition.
 
+=head1 DEMO
+
+![by-word demo](docs/by-word-demo.gif)
+
 =head1 EXAMPLES
 
 =item From STDIN:
