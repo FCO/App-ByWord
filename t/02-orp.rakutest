@@ -1,0 +1,15 @@
+use Test;
+use App::ByWord;
+
+subtest 'calc-orp', {
+    is calc-orp('a'), 0, 'len 1 -> 0';
+    is calc-orp('ab'), 1, 'len 2 -> 1';
+    is calc-orp('abc'), 1, 'len 3 -> 1';
+    is calc-orp('abcd'), 1, 'len 4 -> 1';
+    is calc-orp('abcdef'), 2, 'len 6 -> 2';
+    is calc-orp('abcdefghi'), 3, 'len 9 -> 3';
+    is calc-orp('abcdefghijkl'), 4, 'len 12 -> 4';
+    is calc-orp('abcdefghijklmnop'), 4, 'len 16 -> capped 4';
+}
+
+done-testing;

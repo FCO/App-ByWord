@@ -5,7 +5,7 @@ use Terminal::ANSI;
 my Supplier $intervaller .= new;
 my Supply   $interval     = $intervaller.Supply.migrate;
 
-sub calc-orp(Str() $word) {
+sub calc-orp(Str() $word) is export {
 	return 0 unless $word.chars > 1;
 	min(4, max(1, floor($word.chars div 3)))
 }

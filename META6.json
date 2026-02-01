@@ -3,11 +3,16 @@
   "authors": [
     "Fernando Correa de Oliveira"
   ],
+  "bin": [
+    "bin/by-word.raku"
+  ],
   "build-depends": [
   ],
   "depends": [
+    "Terminal::Width",
+    "Terminal::ANSI"
   ],
-  "description": "blah blah blah",
+  "description": "Rapid serial word presentation (RSVP) in the terminal. Highlights the ORP character in red for faster recognition; provides CLI script.",
   "license": "Artistic-2.0",
   "name": "App::ByWord",
   "perl": "6.d",
@@ -17,9 +22,20 @@
   "resources": [
   ],
   "source-url": "https://github.com/FCO/App-ByWord.git",
+  "support": {
+    "bugtracker": "https://github.com/FCO/App-ByWord/issues",
+    "source": "https://github.com/FCO/App-ByWord"
+  },
   "tags": [
+    "terminal",
+    "RSVP",
+    "speed-reading",
+    "ANSI",
+    "CLI",
+    "visualization"
   ],
   "test-depends": [
+    "Test"
   ],
   "version": "0.0.1"
 }
