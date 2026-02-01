@@ -47,7 +47,7 @@ sub by-word
 
   * `:$to-left`: Horizontal offset (to the left of the terminal center) of the anchor position.
 
-  * `:$starting-word`: Start from this word index (skip).
+  * `:$starting-word`: Start from this word index (skip). Warning: currently not functional; will be fixed in upcoming releases.
 
   * `--wait`: Base delay unit used for empty intervals (no word emitted). Defaults to `$wpm div 50`.
 

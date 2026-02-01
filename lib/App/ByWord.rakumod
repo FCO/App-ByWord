@@ -18,7 +18,7 @@ sub by-word(
 	UInt :$wpm            = 200,
 	Bool :$border         = True,
 	Int  :$to-left        = 5,
-	UInt :$starting-word  = 0,
+	# UInt :$starting-word  = 0,
 	UInt :$wait           = $wpm div 50,
 	UInt :$wait-to-start  = $wait,
 	UInt :$wait-to-finish = $wait,
@@ -45,20 +45,19 @@ sub by-word(
 				done;
 			}
 			emit("") xx $wait-to-start;
-			for $line.comb: / \w+ | <+[\S]-[\w]>+/ {
+			for $line.comb: / <[\w']>+ | <+[\S]-[\w']>+/ {
 				.emit
 			}
 		}
-	}.skip: $starting-word;
+	} #.skip: $starting-word;
 
-	my UInt $read = $starting-word;
+	my UInt $read = 0; # $starting-word;
 
 	react {
 		whenever signal SIGINT { done }
 		whenever signal SIGTERM { done }
 		whenever $words -> $word {
 			LAST done;
-			$read++;
 
 			my $size       = Terminal::API::get-window-size;
 			my $width      = $size.cols;
@@ -86,6 +85,7 @@ sub by-word(
 			}
 
 			next unless $word;
+			$read++;
 
 			my $orp  = calc-orp $word;
 			my $pre  = $word.substr: 0, $orp;
@@ -149,7 +149,7 @@ App::ByWord renders one word at a time centered in the terminal, highlighting th
 =item C<:$border>: When true, draws guide bars above/below the focus line for visual anchoring.
 =item C<:$line-no>: 1‑based line number where the word is drawn.
 =item C<:$to-left>: Horizontal offset (to the left of the terminal center) of the anchor position.
-=item C<:$starting-word>: Start from this word index (skip).
+=item C<:$starting-word>: Start from this word index (skip). Warning: currently not functional; will be fixed in upcoming releases.
 =item C<--wait>: Base delay unit used for empty intervals (no word emitted). Defaults to C<$wpm div 50>.
 =item C<--wait-to-start>: Number of empty intervals emitted before the first word of each input line. Defaults to C<--wait>.
 =item C<--wait-to-finish>: Number of empty intervals emitted after the last word of each input line. Defaults to C<--wait>.
