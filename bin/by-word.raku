@@ -11,35 +11,40 @@ my %*SUB-MAIN-OPTS =
 ;
 
 multi MAIN(
-	*@files,
-	Int  :$wpm     is copy,
-	Bool :$border  is copy,
-	Int  :$line-no is copy,
-	Int  :$to-left is copy,
+	*@files                 ,
+	UInt :w(:$wpm          ),
+	Bool :b(:$border       ),
+	UInt :l(:$line-no      ),
+	Int  :t(:$to-left      ),
+	UInt :s(:$starting-word),
 ) {
-	by-word Supply.merge(|@files.map(*.IO.open.Supply) || $*IN.Supply),
-		|(:$wpm     with $wpm    ),
-		|(:$border  with $border ),
-		|(:$line-no with $line-no),
-		|(:$to-left with $to-left),
+	my $words = by-word Supply.merge(|@files.map(*.IO.Supply) || $*IN.Supply),
+		|(:$wpm           with $wpm          ),
+		|(:$border        with $border       ),
+		|(:$line-no       with $line-no      ),
+		|(:$to-left       with $to-left      ),
+		|(:$starting-word with $starting-word),
+	;
+
+	say "Read $words words"
 }
 
 =begin pod
 
 =head1 NAME
 
-by-word.raku — CLI for App::ByWord
+by-word — CLI for App::ByWord
 
 =head1 SYNOPSIS
 
     # From a file
-    by-word.raku --wpm=450 --no-border text.txt
+    by-word --wpm=450 --no-border text.txt
 
     # From STDIN
-    cat text.txt | by-word.raku --wpm=350
+    cat text.txt | by-word --wpm=350
 
     # Multiple files (merged)
-    by-word.raku file1.txt file2.txt
+    by-word file1.txt file2.txt
 
 =head1 DESCRIPTION
 
@@ -47,10 +52,13 @@ This script drives App::ByWord to render one word at a time in your terminal usi
 
 =head1 OPTIONS
 
-- C<--wpm=Int>         Words per minute (pace).
-- C<--[no-]border>     Draw guide bars above/below the focus line.
-- C<--line-no=Int>     1-based line number for the word.
-- C<--to-left=Int>     Horizontal offset left of center for the anchor.
+Usage: C<by-word [<files> ...] [-w|--wpm[=UInt]] [-b|--border] [-l|--line-no[=UInt]] [-t|--to-left[=Int]] [-s|--starting-word[=UInt]]>
+
+- C<-w|--wpm[=UInt]>           Words per minute (pace).
+- C<-b|--[no-]border>          Draw guide bars above/below the focus line.
+- C<-l|--line-no[=UInt]>       1-based line number for the word.
+- C<-t|--to-left[=Int]>        Horizontal offset left of center for the anchor.
+- C<-s|--starting-word[=UInt]> Start from this word index (skip).
 
 =head1 INPUTS
 

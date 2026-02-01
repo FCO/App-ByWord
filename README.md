@@ -11,12 +11,7 @@ SYNOPSIS
 ```raku
 use App::ByWord;
 
-my $s = supply {
-    .emit for "This is an accelerated reading example.".words;
-    done;
-}
-
-by-word $s, :wpm(400), :border, :line-no(12), :to-left(5);
+by-word "very-big-file.txt".IO, :wpm(400), :border, :line-no(12), :to-left(5);
 ```
 
 DESCRIPTION
@@ -32,10 +27,11 @@ sub by-word
 
     sub by-word(
         Supply() $supply,
-        Int  :$wpm     = 300,
-        Bool :$border  = True,
-        Int  :$line-no = 11,
-        Int  :$to-left = 5,
+        UInt :$wpm           = 300,
+        Bool :$border        = True,
+        UInt :$line-no       = 11,
+        Int  :$to-left       = 5,
+        UInt :$starting-word = 0,
     ) is export
 
   * `$supply`: A `Supply` of lines. Each line is split into words (`.words`) and emitted one by one.
@@ -47,6 +43,13 @@ sub by-word
   * `:$line-no`: 1‑based line number where the word is drawn.
 
   * `:$to-left`: Horizontal offset (to the left of the terminal center) of the anchor position.
+
+  * `:$starting-word`: Start from this word index (skip).
+
+Return Value
+------------
+
+Returns the total number of words read (`UInt`). This value is useful to resume later using `:starting-word`.
 
 ORP (Optimal Recognition Point)
 -------------------------------
@@ -63,25 +66,44 @@ EXAMPLES
   * From STDIN:
 
 ```raku
-    by-word $*IN.Supply;
+    by-word $*IN.Supply, :starting-word(100);
 ```
 
   * From file(s):
 
 ```raku
-    by-word Supply.merge(|@files.map(*.IO.open.Supply));
+    by-word Supply.merge(|@files.map(*.IO.open.Supply)), :wpm(400), :border, :line-no(12), :to-left(5);
 ```
 
-Or use the CLI script in `bin/by-word.raku`:
+Or use the CLI command `by-word`:
 
 ```bash
-    by-word --wpm=450 --no-border text.txt
+    by-word [<files> ...] [-w|--wpm[=UInt]] [-b|--border] [-l|--line-no[=UInt]] [-t|--to-left[=Int]] [-s|--starting-word[=UInt]]
 ```
 
 SIGNALS
 =======
 
   * `SIGINT` (Ctrl‑C): stops playback and restores screen/cursor.
+
+INSTALLATION
+============
+
+Install via `zef`:
+
+```bash
+zef install .
+# Or from GitHub:
+zef install https://github.com/FCO/App-ByWord.git
+```
+
+After installation, invoke the CLI:
+
+```bash
+by-word --wpm=450 --no-border text.txt
+cat text.txt | by-word --wpm=350
+by-word file1.txt file2.txt
+```
 
 DEPENDENCIES
 ============

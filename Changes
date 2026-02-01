@@ -1,6 +1,11 @@
 Revision history for App::ByWord
 
 {{$NEXT}}
+    - CLI: add `-s|--starting-word` option and short flags for existing options; document usage as `by-word [<files> ...] [-w|--wpm[=UInt]] [-b|--border] [-l|--line-no[=UInt]] [-t|--to-left[=Int]] [-s|--starting-word[=UInt]]`.
+    - CLI: print total words read at the end (uses function return value).
+    - API: `by-word` now returns the total number of words read (`UInt`) to facilitate resuming with `:starting-word`.
+    - API: signature updated to include `UInt :$wpm`, `UInt :$line-no`, `Int :$to-left`, and `UInt :$starting-word = 0`.
+    - Documentation: update module POD with new options, usage, Return Value section, and INSTALLATION instructions; references to the executable use `by-word`.
 
 0.0.1  2026-02-01T00:50:58Z
     - Initial version
