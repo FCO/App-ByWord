@@ -1,5 +1,5 @@
 unit class App::ByWord;
-use Terminal::Width;
+use Terminal::API;
 use Terminal::ANSI;
 
 my Supplier $intervaller .= new;
@@ -14,9 +14,9 @@ sub calc-orp(Str() $word) is export {
 
 sub by-word(
 	Supply() $supply,
+	UInt :$line-no is copy,
 	UInt :$wpm            = 200,
 	Bool :$border         = True,
-	UInt :$line-no        = 11,
 	Int  :$to-left        = 5,
 	UInt :$starting-word  = 0,
 	UInt :$wait           = $wpm div 50,
@@ -60,12 +60,15 @@ sub by-word(
 			LAST done;
 			$read++;
 
-			my $width      = terminal-width;
+			my $size       = Terminal::API::get-window-size;
+			my $width      = $size.cols;
+			my $height     = $size.rows;
 			my $half-width = $width div 2;
 
 			my $left-half  = $half-width - $to-left;
 			my $right-half = $half-width - $to-left + 1;
 
+			$line-no //= $height div 2;
 			next if $line-no > $width;
 
 			if $border {
@@ -221,12 +224,12 @@ by-word file1.txt file2.txt
 
 =head1 DEPENDENCIES
 
-=item C<Terminal::Width> — terminal width detection.
+=item C<Terminal::API>  — terminal window size and TTY helpers.
 =item C<Terminal::ANSI>  — cursor movement, screen control, and styling (red ORP character).
 
 =head1 SEE ALSO
 
-C<Terminal::Width>, C<Terminal::ANSI>
+C<Terminal::API>, C<Terminal::ANSI>
 
 =head1 AUTHOR
 
