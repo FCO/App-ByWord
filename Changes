@@ -1,6 +1,8 @@
 Revision history for App::ByWord
 
 {{$NEXT}}
+
+0.0.5  2026-02-02T01:02:29Z
     - fix test
 
 0.0.4  2026-02-01T21:53:41Z
