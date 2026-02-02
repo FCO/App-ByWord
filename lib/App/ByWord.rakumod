@@ -59,9 +59,9 @@ sub by-word(
 		whenever $words -> $word {
 			LAST done;
 
-			my $size       = Terminal::API::get-window-size;
-			my $width      = $size.cols;
-			my $height     = $size.rows;
+			my $size       = try Terminal::API::get-window-size;
+			my $width      = $size.?cols // 10;
+			my $height     = $size.?rows // 10;
 			my $half-width = $width div 2;
 
 			my $left-half  = $half-width - $to-left;
