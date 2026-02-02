@@ -1,6 +1,7 @@
 Revision history for App::ByWord
 
 {{$NEXT}}
+    - fix test
 
 0.0.4  2026-02-01T21:53:41Z
     - Known issue: `--starting-word` / `:starting-word` is currently not functional; documented warning added; will be fixed in upcoming releases.
