@@ -21,7 +21,17 @@ multi MAIN(
 	UInt :$wait-to-start    ,
 	UInt :$wait-to-finish   ,
 ) {
-	my $words = by-word Supply.merge(|@files.map(*.IO.Supply) || $*IN.Supply),
+    my @actual-files;
+    for @files -> $file {
+        if $file.IO.r {
+            @actual-files.push: $file;
+        } else {
+            note "Cannot read file '$file', skipping.";
+        }
+    }
+    unless @actual-files.elems { note "No files to process."; exit }
+
+	my $words = by-word Supply.merge(|@actual-files.map(*.IO.Supply) || $*IN.Supply),
 		|(:$wpm            with $wpm           ),
 		|(:$border         with $border        ),
 		|(:$line-no        with $line-no       ),
